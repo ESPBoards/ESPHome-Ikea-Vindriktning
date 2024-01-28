@@ -64,6 +64,8 @@ sensor:
     temperature:
       name: "Temperature"
       id: temperature
+      filters:
+        - offset: -3.0 # Adjust this by the actual temperature
     humidity:
       name: "Humidity"
       id: humidity
