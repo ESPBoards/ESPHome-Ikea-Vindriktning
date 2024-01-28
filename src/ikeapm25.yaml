@@ -1,0 +1,70 @@
+esphome:
+  name: ikeapm25
+
+esp32:
+  board: seeed_xiao_esp32c3
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: ""
+
+ota:
+  password: ""
+
+wifi:
+  ssid: "<WIFI_SSID>"
+  password: "<WIFI_PASSWORD>"
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Ikeaxiao Fallback Hotspot"
+    password: ""
+
+captive_portal:
+
+font:
+  - file: 'arial.ttf'
+    id: font1
+    size: 14
+
+i2c:
+  sda: GPIO8
+  scl: GPIO9
+  frequency: 200kHz
+
+display:
+  - platform: ssd1306_i2c
+    setup_priority: -100
+    id: oled
+    model: "SSD1306 128x32"
+    address: 0x3C
+    lambda: |-
+      it.printf(0, 0, id(font1), TextAlign::TOP_LEFT, "%.0f ug/m2", id(pm25).state);
+      it.print(0, 16, id(font1), "ESPBoards");
+      it.printf(80, 0, id(font1), TextAlign::TOP_LEFT, "%.1f °C", id(temperature).state);
+      it.printf(80, 16, id(font1), TextAlign::TOP_LEFT,  "%.1f %%", id(humidity).state);
+
+uart:
+  rx_pin: GPIO10
+  baud_rate: 9600
+
+sensor:
+  - platform: pm1006
+    pm_2_5:
+      name: "Particulate Matter 2.5µm Concentration"
+      id: pm25
+
+  - platform: aht10
+    setup_priority: -100
+    temperature:
+      name: "Temperature"
+      id: temperature
+    humidity:
+      name: "Humidity"
+      id: humidity
+    update_interval: 60s
