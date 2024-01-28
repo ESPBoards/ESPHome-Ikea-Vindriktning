@@ -45,7 +45,7 @@ display:
     address: 0x3C
     lambda: |-
       it.printf(0, 0, id(font1), TextAlign::TOP_LEFT, "%.0f ug/m2", id(pm25).state);
-      it.print(0, 16, id(font1), "ESPBoards");
+      it.printf(0, 16, id(font1), TextAlign::TOP_LEFT, "%02d:%02d:%02d", id(hass_time).now().hour, id(hass_time).now().minute, id(hass_time).now().second);
       it.printf(80, 0, id(font1), TextAlign::TOP_LEFT, "%.1f °C", id(temperature).state);
       it.printf(80, 16, id(font1), TextAlign::TOP_LEFT,  "%.1f %%", id(humidity).state);
 
@@ -70,3 +70,7 @@ sensor:
       name: "Humidity"
       id: humidity
     update_interval: 60s
+
+time:
+  - platform: homeassistant
+    id: hass_time
